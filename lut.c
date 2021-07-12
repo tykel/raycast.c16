@@ -8,8 +8,8 @@ void lut_Nsincos(int n, int q)
    double fp_scalar = pow(2, q);
    printf("\nd_%s:", __FUNCTION__);
    for (i = 0; i < n; i++) {
-      double a = 0.1 * sin(i * (180.0/(n*0.5)) * M_PI / 180.0);
-      double b = 0.1 * cos(i * (180.0/(n*0.5)) * M_PI / 180.0);
+      double a = 0.5 * sin(i * (180.0/(n*0.5)) * M_PI / 180.0);
+      double b = 0.5 * cos(i * (180.0/(n*0.5)) * M_PI / 180.0);
       int16_t a_fp = (int16_t)(a * fp_scalar);
       int16_t b_fp = (int16_t)(b * fp_scalar);
       if (i % 6 == 0) printf("\ndw ");
