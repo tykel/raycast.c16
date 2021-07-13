@@ -45,11 +45,11 @@ move_fwd:         push r0
                   shl r0, 2                  ; entry pairs 2*2=4B, so *4.
                   addi r0, d_lut_Nsincos
                   ldm r1, r0
-                  shr r1, 1
+                  divi r1, 3
                   add ra, r1
                   addi r0, 2
                   ldm r1, r0
-                  shr r1, 1
+                  divi r1, 3
                   add rb, r1
                   pop r0
                   ret
@@ -72,7 +72,7 @@ move_bwd:         push r0
 drw_columns:      xor rd, rd
 drw_columnsL:     cmpi rd, N_COLUMNS
                   jz drw_columnsZ
-                  spr 0x7804
+                  spr 0x7802
                   mov r0, rd
                   shl r0, 2
                   drw r0, re, d_color_table_f
