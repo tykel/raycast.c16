@@ -4,7 +4,7 @@ ASFLAGS=-m
 CFLAGS:=-O2
 LDFLAGS:=-lm
 
-raycast.c16: raycast.s lut.s data.s
+raycast.c16: raycast.s lut.s data.s font.bin
 	$(AS16) $< -o $@ $(ASFLAGS)
 
 lut.s: lut
@@ -17,4 +17,4 @@ lut: lut.c
 	$(CC) -o $@ $(CFLAGS) $^ $(LDFLAGS)
 
 data: data.c
-	$(CC) -o $@ $(CFLAGS) $^
+	$(CC) -o $@ $(CFLAGS) $^ $(LDFLAGS)

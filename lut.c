@@ -2,14 +2,15 @@
 #include <stdio.h>
 #include <math.h>
 
-void lut_Nsincos(int n, int q)
+void lut_sincos(int n, int q, int d)
 {
    int i;
+   double invd = 1.0 / (double)d;
    double fp_scalar = pow(2, q);
-   printf("\nd_%s:", __FUNCTION__);
+   printf("\nd_%s_div%d:", __FUNCTION__, d);
    for (i = 0; i < n; i++) {
-      double a = 0.5 * sin(i * (180.0/(n*0.5)) * M_PI / 180.0);
-      double b = 0.5 * cos(i * (180.0/(n*0.5)) * M_PI / 180.0);
+      double a = invd * sin(i * (180.0/(n*invd)) * M_PI / 180.0);
+      double b = invd * cos(i * (180.0/(n*invd)) * M_PI / 180.0);
       int16_t a_fp = (int16_t)(a * fp_scalar);
       int16_t b_fp = (int16_t)(b * fp_scalar);
       if (i % 6 == 0) printf("\ndw ");
@@ -33,7 +34,8 @@ void lut_col2radoffs(int n, int q)
 
 int main(int argc, char **argv)
 {
-   lut_Nsincos(1024, 11);
+   lut_sincos(1024, 11, 2);
+   lut_sincos(1024, 11, 10);
    lut_col2radoffs(80, 13);
    return 0;
 }
