@@ -36,8 +36,8 @@ static const map_prim_data g_map[] = {
    // Line from (2,8) to (8,2)
    //{ MAP_LINE, 2, 8, 8, 2, 0.0 },
    //{ MAP_LINE, 3, 8, 9, 2, 0.0 },
-   // Disk at (10,10) radius (1)
-   { MAP_DISK, 10, 10, 0, 0, 1.0 },
+   // Disk at (12,12) radius (1.5)
+   { MAP_DISK, 12, 12, 0, 0, 1.5 },
 };
 
 void map_trace_line(uint8_t *m, int w, int h, int x0, int y0, int x1, int y1)

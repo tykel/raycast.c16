@@ -115,11 +115,11 @@ drw_columnsZ:     ret
 ; a) the ray is in a non-zero map cell, or
 ; b) we reach 255 steps.
 ;
-; Each step in ray cast is 0.5 map unit length.
+; Each step in ray cast is 0.1 map unit length.
 ; sin(theta) = O/H, cos(theta) = A/H
-; => O = H * sin(theta) = 0.5 * sin(theta)
-; => A = H * cos(theta) = 0.5 * cos(theta)
-; A 1024-entry LUT of these pairs is available (d_lut_sincos_div2, 4096 bytes).
+; => O = H * sin(theta) = 0.1 * sin(theta)
+; => A = H * cos(theta) = 0.1 * cos(theta)
+; A 1024-entry LUT of these pairs is available (d_lut_sincos_div10, 4096 bytes).
 ;
 ; Returns:
 ; r0 - intersection distance
@@ -164,13 +164,13 @@ cast_rayL_:       cmpi r4, 0
                   subi r9, 1
                   jnz cast_rayL
 cast_rayX:        ldi r0, 0                  ; No hit.
-cr0:              ret
+                  ret
 cast_rayZ:
                   ldi r0, 256
                   sub r0, r9
                   ;divi r0, 10
                   ldi r1, 0xf
-cr1:              ret
+                  ret
 
 ;------------------------------------------------------------------------------
 ; Translate a distance to a map wall (r0), to a vertical height on screen.

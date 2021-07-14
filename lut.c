@@ -9,8 +9,8 @@ void lut_sincos(int n, int q, int d)
    double fp_scalar = pow(2, q);
    printf("\nd_%s_div%d:", __FUNCTION__, d);
    for (i = 0; i < n; i++) {
-      double a = invd * sin(i * (180.0/(n*invd)) * M_PI / 180.0);
-      double b = invd * cos(i * (180.0/(n*invd)) * M_PI / 180.0);
+      double a = invd * sin(i * (180.0/(n*0.5)) * M_PI / 180.0);
+      double b = invd * cos(i * (180.0/(n*0.5)) * M_PI / 180.0);
       int16_t a_fp = (int16_t)(a * fp_scalar);
       int16_t b_fp = (int16_t)(b * fp_scalar);
       if (i % 6 == 0) printf("\ndw ");
@@ -35,7 +35,7 @@ void lut_col2radoffs(int n, int q)
 #endif
    printf("\nd_%s:", __FUNCTION__);
    for (i = 0; i < n; i++) {
-      double a = atan(0.5*((double)i - 0.5 * n_fl)/n_fl);
+      double a = atan(((double)i - 0.5 * n_fl)/n_fl);
       int16_t a_fp = (int16_t)(a * fp_scalar); 
       if (i % 12 == 0) printf("\ndw ");
       printf("0x%04hx,", a_fp);
