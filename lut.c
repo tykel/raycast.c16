@@ -21,8 +21,10 @@ void lut_sincos(int n, int q, int d)
 void lut_col2radoffs(int n, int q)
 {
    int i;
-   double midpoint = n * 0.5 * 0.5 * M_PI / 180.0;
+   double n_fl = (double)n;
    double fp_scalar = pow(2, q);
+#if 0
+   double midpoint = n * 0.5 * 0.5 * M_PI / 180.0;
    printf("\nd_%s:", __FUNCTION__);
    for (i = 0; i < n; i++) {
       double a = i * 0.5 * M_PI / 180.0 - midpoint;
@@ -30,12 +32,21 @@ void lut_col2radoffs(int n, int q)
       if (i % 12 == 0) printf("\ndw ");
       printf("0x%04hx,", a_fp);
    }
+#endif
+   printf("\nd_%s:", __FUNCTION__);
+   for (i = 0; i < n; i++) {
+      double a = atan(0.5*((double)i - 0.5 * n_fl)/n_fl);
+      int16_t a_fp = (int16_t)(a * fp_scalar); 
+      if (i % 12 == 0) printf("\ndw ");
+      printf("0x%04hx,", a_fp);
+   }
 }
 
 int main(int argc, char **argv)
 {
-   lut_sincos(1024, 11, 2);
+   // 1024-entry, FP 5.11, 0.1 scale
    lut_sincos(1024, 11, 10);
-   lut_col2radoffs(80, 13);
+   // 80-entry, FP 3.13
+   lut_col2radoffs(DEF_COLUMNS, 13);
    return 0;
 }

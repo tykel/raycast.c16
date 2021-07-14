@@ -9,7 +9,8 @@
 ; rc - player.angle  (3.13 FP)
 ;------------------------------------------------------------------------------
 
-N_COLUMNS         equ   80
+include defs.s
+
 CHAR_OFFS         equ   32
 
 importbin font.bin 0 3072 d_font
@@ -18,7 +19,7 @@ init:             ldi ra, 0x4000          ; position (8.0,8.0)
                   ldi rb, 0x4000
                   ldi rc, 0x0000          ; angle (0.0) (north)
                   ldi re, 0
-                  ldi rf, 4
+                  ldi rf, DEF_COLW
                   pal d_palette
                   bgc 15
 
@@ -45,11 +46,13 @@ move_fwd:         push r0
                   mov r0, rc 
                   shr r0, 6                  ; 2^(16-6) entries
                   shl r0, 2                  ; entry pairs 2*2=4B, so *4.
-                  addi r0, d_lut_sincos_div2
-                  ldm r1, r0
+                  addi r0, d_lut_sincos_div10
+zzzzz:            ldm r1, r0
+                  shl r1, 2
                   add ra, r1
                   addi r0, 2
                   ldm r1, r0
+                  shl r1, 2
                   sub rb, r1
                   pop r0
                   ret
@@ -58,21 +61,23 @@ move_bwd:         push r0
                   mov r0, rc 
                   shr r0, 6                  ; 2^(16-6) entries
                   shl r0, 2                  ; entry pairs 2*2=4B, so *4.
-                  addi r0, d_lut_sincos_div2
+                  addi r0, d_lut_sincos_div10
                   ldm r1, r0
+                  shl r1, 2
                   sub ra, r1
                   addi r0, 2
                   ldm r1, r0
+                  shl r1, 2
                   add rb, r1
                   pop r0
                   ret
 
 drw_columns:      xor rd, rd
-drw_columnsL:     cmpi rd, N_COLUMNS
+drw_columnsL:     cmpi rd, DEF_COLUMNS
                   jz drw_columnsZ
-                  spr 0x7802
+                  spr DEF_COLSPRHW
                   mov r0, rd
-                  shl r0, 2
+                  muli r0, DEF_COLW
                   drw r0, re, d_color_table_f
                   ldi r1, 120
                   drw r0, r1, d_color_table_e
@@ -85,7 +90,7 @@ drw_columnsL:     cmpi rd, N_COLUMNS
                   mov r3, r0
                   shl r0, 8
                   andi r0, 0xff00
-                  addi r0, 2
+                  addi r0, DEF_COLSPRW 
                   ldi r2, drw_columnsSpr
                   stm r0, r2
 S:                db 0x04,0x00
@@ -95,8 +100,8 @@ drw_columnsSpr:   db 0x00,0x00
                   andi r3, 0x7f
                   ldi r2, 120
                   sub r2, r3
-                  ;andi r4, 15
-drw_columnsV:     muli r4, 48
+drw_columnsV:     divi r4, 10
+                  muli r4, 480
                   addi r4, d_color_table_0
 D:                drw r0, r2, r4 
 drw_columnsY:     addi rd, 1
@@ -134,7 +139,7 @@ cast_ray:         mov r8, r0
                   mov r5, rb
 cast_rayll:       ldi r9, 255
 cast_rayL:        add r4, r2                 ; x + N * cos(theta)
-                  add r5, r3                 ; y + N * sin(theta)
+                  sub r5, r3                 ; y + N * sin(theta)
 cast_rayL_:       cmpi r4, 0
                   jz cast_rayX
                   cmpi r5, 0
@@ -236,7 +241,7 @@ sub_r2bcd3:    mov r2, r0
 
 ; Lookup tables:
 ; - scaled sin & cos for ray stepping
-; - column index to radian angle offset
+; - column index to radian angle offset (atan)
 
 include lut.s
 

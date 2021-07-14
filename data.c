@@ -35,6 +35,7 @@ static const map_prim_data g_map[] = {
    { MAP_LINE, 1, 15, 1, 1, 0.0 },
    // Line from (2,8) to (8,2)
    //{ MAP_LINE, 2, 8, 8, 2, 0.0 },
+   //{ MAP_LINE, 3, 8, 9, 2, 0.0 },
    // Disk at (10,10) radius (1)
    { MAP_DISK, 10, 10, 0, 0, 1.0 },
 };
