@@ -33,11 +33,20 @@ static const map_prim_data g_map[] = {
    { MAP_LINE, 15, 1, 15, 15, 0.0 },
    { MAP_LINE, 15, 15, 1, 15, 0.0 },
    { MAP_LINE, 1, 15, 1, 1, 0.0 },
+   { MAP_LINE, 1, 4, 10, 4, 0.0 },
+   { MAP_LINE, 10, 4, 10, 3, 0.0 },
+   { MAP_LINE, 10, 1, 10, 2, 0.0 },
+   { MAP_LINE, 3, 10, 15, 10, 0.0 },
+   { MAP_LINE, 3, 10, 15, 10, 0.0 },
+   { MAP_LINE, 3, 10, 3, 11, 0.0 },
+   { MAP_LINE, 3, 15, 3, 13, 0.0 },
+   { MAP_LINE, 12, 10, 12, 12, 0.0 },
+   { MAP_LINE, 12, 15, 12, 14, 0.0 },
+   { MAP_LINE, 92, 10, 12, 12, 0.0 },
+   { MAP_LINE, 12, 15, 12, 14, 0.0 },
    // Line from (2,8) to (8,2)
-   //{ MAP_LINE, 2, 8, 8, 2, 0.0 },
-   //{ MAP_LINE, 3, 8, 9, 2, 0.0 },
    // Disk at (12,12) radius (1.5)
-   { MAP_DISK, 12, 12, 0, 0, 1.5 },
+   //{ MAP_DISK, 12, 12, 0, 0, 1.5 },
 };
 
 void map_trace_line(uint8_t *m, int w, int h, int x0, int y0, int x1, int y1)

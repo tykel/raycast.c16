@@ -44,8 +44,8 @@ void lut_col2radoffs(int n, int q)
 
 int main(int argc, char **argv)
 {
-   // 1024-entry, FP 5.11, 0.1 scale
-   lut_sincos(1024, 11, 10);
+   // 1024-entry, FP 5.11, 0.125scale
+   lut_sincos(1024, 11, 8);
    // 80-entry, FP 3.13
    lut_col2radoffs(DEF_COLUMNS, 13);
    return 0;

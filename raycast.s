@@ -30,10 +30,10 @@ main:             call handle_inp
 handle_inp:       ldm r0, 0xfff0
                   tsti r0, 4              ; left
                   jz handle_inpR
-                  subi rc, 511
+                  subi rc, 400 ;511
 handle_inpR:      tsti r0, 8              ; right
                   jz handle_inpU
-                  addi rc, 511
+                  addi rc, 400 ;511
 handle_inpU:      tsti r0, 1              ; up
                   jz handle_inpD
                   call move_fwd
@@ -46,13 +46,13 @@ move_fwd:         push r0
                   mov r0, rc 
                   shr r0, 6                  ; 2^(16-6) entries
                   shl r0, 2                  ; entry pairs 2*2=4B, so *4.
-                  addi r0, d_lut_sincos_div10
+                  addi r0, d_lut_sincos_div8
 zzzzz:            ldm r1, r0
-                  shl r1, 2
+                  ;shl r1, 1
                   add ra, r1
                   addi r0, 2
                   ldm r1, r0
-                  shl r1, 2
+                  ;shl r1, 1
                   sub rb, r1
                   pop r0
                   ret
@@ -61,13 +61,13 @@ move_bwd:         push r0
                   mov r0, rc 
                   shr r0, 6                  ; 2^(16-6) entries
                   shl r0, 2                  ; entry pairs 2*2=4B, so *4.
-                  addi r0, d_lut_sincos_div10
+                  addi r0, d_lut_sincos_div8
                   ldm r1, r0
-                  shl r1, 2
+                  ;shl r1, 1
                   sub ra, r1
                   addi r0, 2
                   ldm r1, r0
-                  shl r1, 2
+                  ;shl r1, 1
                   add rb, r1
                   pop r0
                   ret
@@ -75,13 +75,16 @@ move_bwd:         push r0
 drw_columns:      xor rd, rd
 drw_columnsL:     cmpi rd, DEF_COLUMNS
                   jz drw_columnsZ
+                 
+                  ;jmp drw_columnsCast
+
                   spr DEF_COLSPRHW
                   mov r0, rd
                   muli r0, DEF_COLW
                   drw r0, re, d_color_table_f
                   ldi r1, 120
-                  drw r0, r1, d_color_table_e
-                  mov r0, rd
+                  drw r0, r1, d_color_table_c
+drw_columnsCast:  mov r0, rd
                   call cast_ray
                   mov r4, r0
                   cmpi r0, 0
@@ -100,7 +103,7 @@ drw_columnsSpr:   db 0x00,0x00
                   andi r3, 0x7f
                   ldi r2, 120
                   sub r2, r3
-drw_columnsV:     divi r4, 10
+drw_columnsV:     divi r4, 8
                   muli r4, 480
                   addi r4, d_color_table_0
 D:                drw r0, r2, r4 
@@ -131,7 +134,7 @@ cast_ray:         mov r8, r0
                   add r1, rc
                   shr r1, 6                  ; 2^(16-6) entries
                   shl r1, 2                  ; entry pairs 2*2=4B, so *4.
-                  addi r1, d_lut_sincos_div10
+                  addi r1, d_lut_sincos_div8
                   ldm r2, r1                 ; sin
                   addi r1, 2
                   ldm r3, r1                 ; cos
@@ -168,15 +171,13 @@ cast_rayX:        ldi r0, 0                  ; No hit.
 cast_rayZ:
                   ldi r0, 256
                   sub r0, r9
-                  ;divi r0, 10
-                  ldi r1, 0xf
                   ret
 
 ;------------------------------------------------------------------------------
 ; Translate a distance to a map wall (r0), to a vertical height on screen.
 ; Returns:
 ; r0 - height in pixels
-dist_to_size:     ldi r1, 2400 ;480
+dist_to_size:     ldi r1, 1920 ;480
                   divi r0, 2
                   addi r0, 1
 dist_to_sizeZ:    div r1, r0, r0
